@@ -1,11 +1,11 @@
 const WebSocket = require('ws');
 
-modele.exports = () => {
+module.exports = (server) => {
   const wss = new WebSocket.Server({ server });
 
   wss.on('connection', (ws, req) => {
     // websocket 연결시
-    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress; // proxy-addr도 사용가능
     console.log('새로운 클라이언트 접속 ', ip);
     ws.on('message', (message) => {
       console.log(message);

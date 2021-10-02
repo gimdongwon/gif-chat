@@ -9,10 +9,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
-const { parentPort } = require('worker_threads');
 
 const app = express();
-app.set('port', process.env.PORT);
+app.set('port', process.env.PORT || 8005);
 app.set('view engine', 'html');
 
 nunjucks.configure('views', {
@@ -20,12 +19,14 @@ nunjucks.configure('views', {
   watch: true, // html 파일이 변경될 때 템플릿 엔진을 재 렌더링함.
 });
 
+app.use('/', indexRouter);
+
 // server settings
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({
     resave: false,

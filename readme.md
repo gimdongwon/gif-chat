@@ -14,5 +14,13 @@
 
 퍼그의 HTML 문법 변화에 적응하기 힘든 사람을 위해 만든 템플릿 엔진으로 모질라에서 개발되엇고 HTML 문법을 그대로 사용하되 추가로 JS 문법을 사용할 수 있고, 파이썬 템플릿 엔진인 Twig와 문법이 유사하다.
 
+4. ws
 
+wss에서 readyState는 4가지가 있다.
 
+1. CONNECTING
+2. OPEN
+3. CLOSING
+4. CLOSED
+
+OPEN일 때만 에러없이 메시지를 보낼 수 있고 확인 후 ws.send 메서드로 하나의 메시지를 보낸다. cloase 이벤트에서 setInterval을 clearInterval로 정리해야 메모리 누수를 방지할 수 있다.

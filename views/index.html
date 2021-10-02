@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIF Chat Room</title>
+  </head>
+  <body>
+    <div>F12를 누러 console과 network 탭으로 확인하시오</div>
+    <script>
+      const webSocket = new WebSocket('ws://localhost:8005');
+      webSocket.onopen = function () {
+        console.log('Complete Websocket connect server');
+      };
+      webSocket.onmessage = function (event) {
+        console.log(event.data);
+        webSocket.send('클라이언트에서 서버로 답장을 보낸다.');
+      };
+    </script>
+  </body>
+</html>
