@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
+const connect = require('./schemas');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
@@ -18,6 +19,8 @@ nunjucks.configure('views', {
   express: app,
   watch: true, // html 파일이 변경될 때 템플릿 엔진을 재 렌더링함.
 });
+
+connect();
 
 app.use('/', indexRouter);
 

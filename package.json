@@ -10,11 +10,15 @@
     "start": "nodemon app"
   },
   "dependencies": {
+    "axios": "^0.22.0",
+    "color-hash": "^2.0.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "mongoose": "^6.0.8",
     "morgan": "^1.10.0",
+    "multer": "^1.4.3",
     "nunjucks": "^3.2.1",
     "socket.io": "2",
     "ws": "^8.2.2"
