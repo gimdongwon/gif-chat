@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 const ColorHash = require('color-hash').default;
-const bodyParser = require('body-parser');
 
 dotenv.config();
 const webSocket = require('./socket');
@@ -39,6 +38,7 @@ const sessionMiddleware = session({
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 app.use(
@@ -59,7 +59,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use('/', indexRouter);
 
 // error 처리
