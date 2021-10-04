@@ -1,9 +1,32 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
 const Room = require('../schemas/room');
 const Chat = require('../schemas/chat');
 
 const router = express.Router();
+
+try {
+  fs.readdirSync('uploads');
+} catch (error) {
+  console.error(error);
+  fs.mkdirSync('uploads');
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads/');
+    },
+    filename(req, file, done) {
+      const ext = path.extname(file.originalname);
+      done(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -87,9 +110,39 @@ router.post('/room/:id/chat', async (req, res, next) => {
     const chat = await Chat.create({
       room: req.params.id,
       user: req.session.color,
-      chat: req.body.chats,
+      chat: req.body.chat,
     });
     // 소켓들에게 chat 메시지 전송
+    req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
+    res.send('ok');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/room/:id/chat', async (req, res, next) => {
+  try {
+    const chat = await Chat.create({
+      room: req.params.id,
+      user: req.session.color,
+      chat: req.body.chat,
+    });
+    req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
+    res.send('ok');
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/room/:id/gif', upload.single('gif'), async (req, res, next) => {
+  try {
+    const chat = await Chat.create({
+      room: req.params.id,
+      user: req.session.color,
+      gif: req.file.filename,
+    });
     req.app.get('io').of('/chat').to(req.params.id).emit('chat', chat);
     res.send('ok');
   } catch (error) {
